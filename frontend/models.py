@@ -1,15 +1,14 @@
 from django.db import models
 
-
 class DataSource(models.Model):
     code = models.CharField(max_length=30)
     type = models.CharField(max_length=20)
     url = models.URLField()
     description = models.CharField(max_length=255, null=True)
+    last_checked = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.code
-
+        return f"{self.code}: {self.url[:50]}"
 
 class Story(models.Model):
     data_source = models.ForeignKey(DataSource, on_delete=models.PROTECT)
