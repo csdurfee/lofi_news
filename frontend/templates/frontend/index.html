@@ -9,22 +9,26 @@
     <title>Lofi News</title>
 </head>
 <body class="font-mono dark dark:bg-black dark:text-white">
-    <header class="flex justify-between">
+    <header class="flex justify-between items-center">
         <div class="inline-flex items-center p-5 text-3xl">Lofi <span class="pl-2 font-bold">News</span></div>
         <div >
-            <a class="inline-flex items-center" href="/about">About</a>
-            <a class="inline-flex items-center pl-5 text-amber-300" href="/join">Join (it's free)</a>
+            <a class="inline-flex" href="/about">About</a>
+            <a class="inline-flex pl-5 text-amber-300" href="/join">Join (it's free)</a>
         </div>
     </header>
     {% for story in stories %}
-    <article class="p-5">
-        <p>
+    <article id="story-{{story.id}}" class="p-5">
+        <div class="text-amber-300">
             {% if story.original_url %}
                 <a href="{{ story.original_url }}">{{ story.title }}</a>
             {% else %}
-                {{ story.text }}
+                {{ story.title }}
             {% endif %}
-        </p>
+        </div>
+        <div class="article-body">
+            {{ story.text|truncatewords:50 }}
+        </div>
+
         <small>{{ story.data_source }} &mdash; {{ story.retrieved }}</small>
     </article>
     {% empty %}
