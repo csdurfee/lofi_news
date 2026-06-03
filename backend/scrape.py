@@ -3,6 +3,8 @@ import logging
 import os
 import sys
 
+import strategy.rss
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lofi_news.settings')
 django.setup()
@@ -19,7 +21,10 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     sources = models.DataSource.objects.all()
-    logger.info("Found %d data sources", sources.count())
-    print(sources)
-
+    logger.info("Found %s data sources", sources)
+    for source in sources:
+        logger.info("Fetching %s", source)
+        if source.type == 'rss':
+            scraped = strategy.rss.scrape(source.url)
+            print(scraped)
     

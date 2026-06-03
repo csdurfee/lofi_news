@@ -12,9 +12,11 @@ class DataSource(models.Model):
 
 class Story(models.Model):
     data_source = models.ForeignKey(DataSource, on_delete=models.PROTECT)
+    title = models.CharField(max_length=100)
     text = models.TextField()
     original_url = models.URLField(null=True)
     retrieved = models.DateTimeField(auto_now_add=True)
+    raw_data = models.JSONField()
 
     def __str__(self):
         return f"{self.data_source.code}: {self.text[:50]}"
