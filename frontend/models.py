@@ -19,4 +19,4 @@ class Story(models.Model):
     raw_data = models.JSONField()
 
     def __str__(self):
-        return f"{self.data_source.code}: {self.text[:50]}"
+        return f"{self.data_source.code}: {self.title[:50]}"

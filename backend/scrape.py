@@ -25,6 +25,16 @@ if __name__ == '__main__':
     for source in sources:
         logger.info("Fetching %s", source)
         if source.type == 'rss':
-            scraped = strategy.rss.scrape(source.url)
-            print(scraped)
+            stories = strategy.rss.scrape(source.url)
+            #print(scraped)
+            for story in stories:
+                # TODO: check for uniqueness
+                story_model = models.Story(data_source=source,
+                                           title=story['title'],
+                                           original_url = story['original_url'],
+                                           raw_data = story['raw_data'],
+                                           text = story['text'])
+                story_model.save()
+                logger.info("created story %s", story_model)
+
     
