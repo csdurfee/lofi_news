@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lofi News</title>
+</head>
+<body>
+    <h1>Lofi News</h1>
+
+    {% for story in stories %}
+    <article>
+        <p>
+            {% if story.original_url %}
+                <a href="{{ story.original_url }}">{{ story.text }}</a>
+            {% else %}
+                {{ story.text }}
+            {% endif %}
+        </p>
+        <small>{{ story.data_source.code }} &mdash; {{ story.retrieved }}</small>
+    </article>
+    {% empty %}
+    <p>No stories yet.</p>
+    {% endfor %}
+</body>
+</html>

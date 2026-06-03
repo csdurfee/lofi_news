@@ -1,9 +1,7 @@
 from django.shortcuts import render
-
-# Create your views here.
-
-from django.http import HttpResponse
+from .models import Story
 
 
 def index(request):
-    return HttpResponse("Everybody starts somewhere")
+    stories = Story.objects.select_related('data_source').order_by('-retrieved')
+    return render(request, 'frontend/index.html', {'stories': stories})
