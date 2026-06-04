@@ -23,8 +23,10 @@ def index(request):
 def more(request):
     # get last viewed story id from request...
     signals = read_signals(request)
-    logger.error(signals)
-    if 'lastId' in signals:
+    logger.error("signals is ", signals)
+    if signals and ('lastId' in signals):
         stories = Story.objects.filter(id__gt=signals['lastId'])[:10]
         return render(request, 'frontend/index.html',
                     {'stories': stories})
+    else:
+        return ""
