@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from .models import Story
 
-from datastar_py.django import read_signals
+from datastar_py.django import (DatastarResponse, ServerSentEventGenerator, 
+                                read_signals)
 
 import logging
 logger = logging.getLogger(__name__)
@@ -22,11 +24,17 @@ def index(request):
 
 def more(request):
     # get last viewed story id from request...
+
+    ## still getting datastar PATCH working right
     signals = read_signals(request)
-    logger.error("signals is ", signals)
+    logger.error("signals is %r" % signals)
     if signals and ('lastId' in signals):
         stories = Story.objects.filter(id__gt=signals['lastId'])[:10]
-        return render(request, 'frontend/index.html',
-                    {'stories': stories})
+        rendered = render_to_string('frontend/stories.html',
+                    {'stories': stories, 'request': request})
+
+        return DatastarResponse(
+                ServerSentEventGenerator.patch_elements(rendered)
+        )
     else:
         return ""
