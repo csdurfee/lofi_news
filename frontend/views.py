@@ -16,3 +16,8 @@ def index(request):
                 .order_by('-retrieved')[offset : offset+limit]
     return render(request, 'frontend/index.html', 
                   {'stories': stories})
+
+
+def more(request):
+    # get last viewed story id from request...
+    ...
