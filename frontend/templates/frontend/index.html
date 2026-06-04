@@ -35,9 +35,6 @@
             <span data-signals:last-id="{{ story.id }}"
                 data-on-intersect="@get('/more')">Loading...</span>
         {% endif %}
-
-    {% empty %}
-            <p>No stories yet.</p>
     {% endfor %}
 </body>
 </html>
