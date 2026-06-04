@@ -11,6 +11,8 @@ django.setup()
 
 from frontend import models
 
+# this is a little funky because it's not using django's default log
+# config. but simplicity wins here.
 LOG_DIR = os.path.join(os.path.dirname(__file__), 'logs')
 logging.basicConfig(
     filename=os.path.join(LOG_DIR, 'scrape.log'),
