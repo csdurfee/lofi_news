@@ -23,20 +23,24 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     sources = models.DataSource.objects.all()
-    logger.info("Found %s data sources", sources)
+    logger.info("Found {len(sources)} data sources")
     for source in sources:
-        logger.info("Fetching %s", source)
+        logger.info(f"Fetching {source}")
         if source.type == 'rss':
             stories = strategy.rss.scrape(source.url)
             #print(scraped)
             for story in stories:
-                # TODO: check for uniqueness
-                story_model = models.Story(data_source=source,
-                                           title=story['title'],
-                                           original_url = story['original_url'],
-                                           raw_data = story['raw_data'],
-                                           text = story['text'])
-                story_model.save()
-                logger.info("created story %s", story_model)
+                # TODO: check for uniqueness based on `original_url`
+                # uniqueness is tested based on original URL.
+                if models.Story.objects.filter(original_url=story['original_url']).exists():
+                    logger.info(f"story {story['original_url']} already exists")
+                else:
+                    story_model = models.Story(data_source=source,
+                                            title=story['title'],
+                                            original_url = story['original_url'],
+                                            raw_data = story['raw_data'],
+                                            text = story['text'])
+                    story_model.save()
+                    logger.info("created story %s", story_model)
 
     

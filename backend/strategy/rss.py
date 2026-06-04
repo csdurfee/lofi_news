@@ -5,6 +5,17 @@ def fetch(url):
     feed = feedparser.parse(url)
     return feed
 
+def get_clean_text(raw_data):
+    soup = BeautifulSoup(raw_data, 'html.parser')
+    clean_text = soup.get_text() \
+        .strip()
+    # TODO: fix no space after periods?
+    # regex: (\.)([A-Z]), replace with \1 \2 everywhere
+    
+    return clean_text
+
+
+
 def scrape(url):
     """
     Loads the specified RSS URL and converts them to our data format.
@@ -13,12 +24,15 @@ def scrape(url):
     raw_data = fetch(url)
     for entry in raw_data.entries:
         raw_data = entry.content[0].value
-        soup = BeautifulSoup(raw_data, 'html.parser')
+
+        clean_text = get_clean_text(raw_data)
+
         parsed = dict(
             title = entry.title,
             original_url = entry.link,
             raw_data = raw_data,
-            text = soup.get_text(),
+            text = clean_text,
         )
+
         out.append(parsed)
     return out
