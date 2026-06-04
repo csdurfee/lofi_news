@@ -4,26 +4,28 @@ from .models import Story
 
 from datastar_py.django import (DatastarResponse, ServerSentEventGenerator, 
                                 read_signals)
+from datastar_py.consts import ElementPatchMode
 
 import logging
 logger = logging.getLogger(__name__)
 
 def index(request):
     #logger.error("hoo boy")
-    # TODO: validation
-    # TODO: these should be coming from datastar signal, probably
+
     limit = request.GET.get('limit', 10)
-    offset = request.GET.get('offset', 0)
+    # offset = request.GET.get('offset', 0)
 
     # oldest stories first
     stories = Story.objects \
-                .select_related('data_source')[offset : offset+limit]
+                .select_related('data_source')[:limit]
+    last_id = stories[limit-1].id
+    
     return render(request, 'frontend/index.html', 
-                  {'stories': stories})
+                  {'stories': stories,
+                   'last_id': last_id})
 
 
 def more(request):
-    # get last viewed story id from request...
 
     ## still getting datastar PATCH working right
     signals = read_signals(request)
@@ -34,7 +36,9 @@ def more(request):
                     {'stories': stories, 'request': request})
 
         return DatastarResponse(
-                ServerSentEventGenerator.patch_elements(rendered)
+                ServerSentEventGenerator.patch_elements(rendered,
+                                                        selector="#stories",
+                                                        mode=ElementPatchMode.APPEND)
         )
     else:
         return ""

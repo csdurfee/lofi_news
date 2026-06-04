@@ -17,5 +17,8 @@
         </div>
     </header>
     {% include "frontend/stories.html" %}
+
+    <div data-signals:last-id="{{ last_id }}" 
+        data-on-intersect="@get('/more')">Loading...</div>
 </body>
 </html>

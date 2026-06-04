@@ -15,8 +15,7 @@
             <small>{{ story.data_source }} &mdash; {{ story.retrieved }}</small>
         </article>
         {% if forloop.last %}
-            <span data-signals:last-id="{{ story.id }}"
-                data-on-intersect="@get('/more')">Loading...</span>
+            
         {% endif %}
     {% endfor %}
 </div>
