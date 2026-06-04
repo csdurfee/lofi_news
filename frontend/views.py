@@ -24,21 +24,44 @@ def index(request):
                   {'stories': stories,
                    'last_id': last_id})
 
+def no_stories():
+    """
+    clears out the "load more" if there are no stories to load
+    """
+    return DatastarResponse(
+                ServerSentEventGenerator.remove_elements("#load-more")
+            )
 
 def more(request):
 
     ## still getting datastar PATCH working right
     signals = read_signals(request)
     logger.error("signals is %r" % signals)
-    if signals and ('lastId' in signals):
-        stories = Story.objects.filter(id__gt=signals['lastId'])[:10]
-        rendered = render_to_string('frontend/stories.html',
-                    {'stories': stories, 'request': request})
 
-        return DatastarResponse(
-                ServerSentEventGenerator.patch_elements(rendered,
-                                                        selector="#stories",
-                                                        mode=ElementPatchMode.APPEND)
-        )
+    if signals and ('lastId' in signals):
+        lastId = signals['lastId']
+        limit = 10
+
+        stories = Story.objects.filter(id__gt=lastId)[:limit]
+
+        if len(stories) == 0:
+            return no_stories()
+        else:
+            rendered = render_to_string('frontend/stories.html',
+                        {'stories': stories, 'request': request})
+            newLastId = stories[limit-1].id
+
+            # not well documented, but you can just return an array
+            # to DatastarResponse.
+            return DatastarResponse(
+                [ServerSentEventGenerator.patch_elements(rendered,
+                                                    selector="#stories",
+                                                    mode=ElementPatchMode.APPEND),
+                # note: it's NOT kebab case for signals sent from server
+                ServerSentEventGenerator.patch_signals(
+                            {"lastId": newLastId }
+                        )
+                ]
+            )
     else:
-        return ""
+        return no_stories()
