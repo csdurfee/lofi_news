@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Join – Lofi News</title>
+</head>
+<body class="font-mono dark dark:bg-black dark:text-white min-h-screen pb-10">
+    {% include "frontend/body_header.html" %}
+
+    <main class="flex justify-center mt-20 px-4">
+        <div class="w-full max-w-sm">
+            <h1 class="text-2xl font-bold mb-8">Create an account</h1>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-gray-400" for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+                    <input id="{{ field.id_for_label }}"
+                           name="{{ field.html_name }}"
+                           type="{{ field.field.widget.input_type }}"
+                           autocomplete="{{ field.html_name }}"
+                           {% if field.value %}value="{{ field.value }}"{% endif %}
+                           class="w-full bg-gray-900 border {% if field.errors %}border-red-500{% else %}border-gray-700{% endif %} rounded px-3 py-2 focus:outline-none focus:border-amber-300">
+                    {% for error in field.errors %}
+                    <p class="text-red-400 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
+                    {% if field.help_text %}
+                    <p class="text-gray-500 text-xs mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit"
+                    class="w-full bg-amber-300 text-black font-bold py-2 rounded hover:bg-amber-200 transition-colors mt-2">
+                    Join
+                </button>
+            </form>
+
+            <p class="mt-6 text-gray-400 text-sm">
+                Already have an account?
+                <a href="/accounts/login/" class="text-amber-300 hover:underline">Log in</a>
+            </p>
+        </div>
+    </main>
+</body>
+</html>

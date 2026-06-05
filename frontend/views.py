@@ -1,13 +1,27 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from .models import Story
 
-from datastar_py.django import (DatastarResponse, ServerSentEventGenerator, 
+from datastar_py.django import (DatastarResponse, ServerSentEventGenerator,
                                 read_signals)
 from datastar_py.consts import ElementPatchMode
 
 import logging
 logger = logging.getLogger(__name__)
+
+def join(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'frontend/join.html', {'form': form})
+
 
 def index(request):
     limit = request.GET.get('limit', 10)
