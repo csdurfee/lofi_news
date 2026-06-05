@@ -1,6 +1,6 @@
 <div id="stories">
     {% for story in stories %}
-        <article id="story-{{story.id}}" class="p-5">
+        <article id="story-{{story.id}}" class="m-5 p-5 border-5 border-double">
             <div class="text-amber-300">
                 {% if story.original_url %}
                     <a href="{{ story.original_url }}">{{ story.title }}</a>
@@ -8,11 +8,23 @@
                     {{ story.title }}
                 {% endif %}
             </div>
-            <div class="article-body">
-                {{ story.text|truncatewords:50 }}
-            </div>
+            {% if story.text %}
+                <div class="article-body pt-5">
+                    {{ story.text|truncatewords:50 }}
+                </div>
+            {% endif %}
 
-            <small>{{ story.data_source }} &mdash; {{ story.retrieved }}</small>
+            <div id="button-panel-{{ story.id }}" class="flex justify-between items-center">
+                <span class="text-sm text-gray-400">via {{ story.data_source.code }}</span>
+                <div class="inline-flex">
+                    <form class="inline" method="post" data-on:submit="@post('/vote/up', {contentType: 'form'})">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning mr-5">More like this</button>
+                    </form>
+                    {# <button class="btn btn-secondary" data-on:click="@post('/vote/down')">Less</button> #}
+                </div>
+            </div>
+            {# <small>{{ story.data_source }} &mdash; {{ story.retrieved }}</small> #}
         </article>
         {% if forloop.last %}
             
