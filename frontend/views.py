@@ -86,7 +86,6 @@ def more(request):
 
 @require_http_methods(['POST'])
 def vote(request, direction, story_id):
-    # TODO: enforce POST only
     logger.info("entered vote")
     # get story for ID
     try:
@@ -97,6 +96,7 @@ def vote(request, direction, story_id):
     # determine if vote exists, if not, register it
     # FIXME: replace these mock values with actual ones
     if direction == "up":
+        # TODO: get or create the vote object
         story_obj.can_up = lambda: False
     if direction == "down":
         story_obj.can_down = lambda: False

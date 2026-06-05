@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <title>lofi news</title>
 </head>
-<body class="font-mono dark dark:bg-black dark:text-white">
+<body class="font-mono dark dark:bg-black dark:text-white overflow-x-hidden">
     {% include "frontend/body_header.html" %}
 
     {% if text_body %}
@@ -17,7 +17,7 @@
     {% else %}
         {% include "frontend/stories.html" %}
         <div id="load-more" data-signals:last-id="{{ last_id }}"
-        data-on-intersect="@get('/more')">Loading...</div>
+            data-on-intersect="@get('/more')">Loading...</div>
     {% endif %}
 
 </body>
