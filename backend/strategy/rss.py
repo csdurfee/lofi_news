@@ -1,3 +1,5 @@
+import re
+
 import feedparser
 from bs4 import BeautifulSoup
 
@@ -14,7 +16,14 @@ def get_clean_text(raw_data):
     
     return clean_text
 
-
+def is_baloney(parsed):
+    """
+    Filter out entries which are ads, etc.
+    """
+    # reddit nonsense
+    if re.search("contains content not supported", parsed.text):
+        return True
+    return False
 
 def scrape(url):
     """
@@ -33,6 +42,6 @@ def scrape(url):
             raw_data = raw_data,
             text = clean_text,
         )
-
-        out.append(parsed)
+        if not is_baloney(parsed):
+            out.append(parsed)
     return out

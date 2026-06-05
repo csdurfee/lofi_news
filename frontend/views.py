@@ -10,8 +10,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 def index(request):
-    #logger.error("hoo boy")
-
     limit = request.GET.get('limit', 10)
     # offset = request.GET.get('offset', 0)
 
