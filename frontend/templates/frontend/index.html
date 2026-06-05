@@ -12,7 +12,9 @@
     <header class="flex justify-between items-center">
         <div class="inline-flex items-center p-5 text-3xl">Lofi <span class="pl-2 font-bold">News</span></div>
         <div class="pr-5">
-            <a class="inline-flex" href="/about">About</a>
+            <span class="hidden min-[550px]:inline-flex">
+                <a href="/about">About</a>
+            </span>
             {% if user.is_authenticated %}
                 <span class="inline-flex pl-5 text-gray-400">{{ user.username }}</span>
                 <form class="inline" method="post" action="/accounts/logout/">
@@ -21,7 +23,8 @@
                 </form>
             {% else %}
                 <a class="inline-flex pl-5" href="/accounts/login/">Log in</a>
-                <a class="inline-flex pl-5 text-amber-300" href="/join">Join (it's free)</a>
+                <a class="inline-flex pl-5 text-amber-300" href="/join">Join
+                <span class="hidden min-[550px]:inline-flex">&nbsp;(it's free)</span></a>
             {% endif %}
         </div>
     </header>
