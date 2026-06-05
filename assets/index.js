@@ -1,7 +1,8 @@
-function component() {
-  const element = document.createElement('div');
-  element.innerHTML = 'Hello HMR2Vite';
-  return element;
-}
+// import _ from 'lodash';
 
-document.body.appendChild(component());
+// function component() {
+//   const element = document.createElement('div');
+//   element.innerHTML =  _.join(['Hello', 'lodash'], ' ');
+//   return element;
+// }
+// document.body.appendChild(component());
