@@ -1,3 +1,4 @@
-django==6.0.6
+beautifulsoup4==4.14.3
+datastar_py==1.0.2
+Django==6.0.6
 feedparser==6.0.12
-ipython==9.14.0
