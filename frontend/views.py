@@ -4,8 +4,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .models import Story
 
-from datastar_py.django import (DatastarResponse, ServerSentEventGenerator,
-                                read_signals)
+from datastar_py.django import (DatastarResponse, read_signals)
+from datastar_py.django import ServerSentEventGenerator as SSE
 from datastar_py.consts import ElementPatchMode
 
 import logging
@@ -41,12 +41,10 @@ def no_stories():
     clears out the "load more" if there are no stories to load
     """
     return DatastarResponse(
-                ServerSentEventGenerator.remove_elements("#load-more")
+                SSE.remove_elements("#load-more")
             )
 
 def more(request):
-
-    ## still getting datastar PATCH working right
     signals = read_signals(request)
     logger.error("signals is %r" % signals)
 
@@ -66,11 +64,12 @@ def more(request):
             # not well documented, but you can just return an array
             # to DatastarResponse.
             return DatastarResponse(
-                [ServerSentEventGenerator.patch_elements(rendered,
-                                                    selector="#stories",
-                                                    mode=ElementPatchMode.APPEND),
+                [
+                SSE.patch_elements(rendered,
+                                    selector="#stories",
+                                    mode=ElementPatchMode.APPEND),
                 # note: it's NOT kebab case for signals sent from server
-                ServerSentEventGenerator.patch_signals(
+                SSE.patch_signals(
                             {"lastId": newLastId }
                         )
                 ]
