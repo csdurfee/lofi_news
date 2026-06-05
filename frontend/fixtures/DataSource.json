@@ -1,0 +1,24 @@
+[
+{
+    "model": "frontend.datasource",
+    "pk": 1,
+    "fields": {
+        "code": "reddit-nba",
+        "type": "rss",
+        "url": "https://www.reddit.com/r/nba.rss",
+        "description": "Reddit r/nba",
+        "last_checked": "2026-06-03T20:30:45.608Z"
+    }
+},
+{
+    "model": "frontend.datasource",
+    "pk": 2,
+    "fields": {
+        "code": "yahoo-nba",
+        "type": "rss",
+        "url": "https://sports.yahoo.com/nba/rss/",
+        "description": "Yahoo NBA RSS",
+        "last_checked": "2026-06-03T20:30:45.608Z"
+    }
+}
+]
