@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 class DataSource(models.Model):
     code = models.CharField(max_length=30)
     type = models.CharField(max_length=20)
@@ -28,3 +30,9 @@ class Story(models.Model):
     def can_down(self):
         # TODO implement this
         return True
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    direction = models.SmallIntegerField(choices={-1: "down", 1 : "up"})
+    time = models.DateTimeField(auto_now_add=True)

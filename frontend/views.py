@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse, Http404
+from django.http import Http404
 from django.views.decorators.http import require_http_methods
 
 from .models import Story
@@ -39,7 +39,7 @@ def index(request):
                    'last_id': last_id})
 
 def about(request):
-    text_body = "foo"
+    text_body = "this page left intentionally blank"
     return render(request, 'frontend/index.html',
                   {'text_body': text_body})
 
