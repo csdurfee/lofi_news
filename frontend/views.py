@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse
+
 from .models import Story
 
 from datastar_py.django import (DatastarResponse, read_signals)
@@ -76,3 +78,7 @@ def more(request):
             )
     else:
         return no_stories()
+
+def vote(request, direction):
+    logger.info("asdfadsfahellooooooo")
+    return HttpResponse("not implemented")
