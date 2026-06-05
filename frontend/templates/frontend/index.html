@@ -11,9 +11,14 @@
 <body class="font-mono dark dark:bg-black dark:text-white">
     {% include "frontend/body_header.html" %}
 
-    {% include "frontend/stories.html" %}
+    {% if text_body %}
 
-    <div id="load-more" data-signals:last-id="{{ last_id }}"
+        <div class="min-h-128 m-50">{{ text_body }}</div>
+    {% else %}
+        {% include "frontend/stories.html" %}
+        <div id="load-more" data-signals:last-id="{{ last_id }}"
         data-on-intersect="@get('/more')">Loading...</div>
+    {% endif %}
+
 </body>
 </html>

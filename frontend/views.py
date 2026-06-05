@@ -38,6 +38,11 @@ def index(request):
                   {'stories': stories,
                    'last_id': last_id})
 
+def about(request):
+    text_body = "foo"
+    return render(request, 'frontend/index.html',
+                  {'text_body': text_body})
+
 def no_stories():
     """
     clears out the "load more" if there are no stories to load
