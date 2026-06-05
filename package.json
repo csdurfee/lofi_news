@@ -1,0 +1,26 @@
+{
+  "name": "lofi_news",
+  "version": "1.0.0",
+  "description": "lofi_news is an RSS aggregator written using:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csdurfee/lofi_news.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/csdurfee/lofi_news/issues"
+  },
+  "homepage": "https://github.com/csdurfee/lofi_news#readme",
+  "devDependencies": {
+    "vite": "^8.0.16"
+  }
+}
