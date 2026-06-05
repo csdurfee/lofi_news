@@ -20,3 +20,11 @@ class Story(models.Model):
 
     def __str__(self):
         return f"{self.data_source.code}: {self.title[:50]}"
+
+    def can_up(self):
+        # TODO implement this
+        return True
+
+    def can_down(self):
+        # TODO implement this
+        return True

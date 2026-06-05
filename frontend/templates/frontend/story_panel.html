@@ -1,0 +1,23 @@
+<div id="button-panel-{{ story.id }}" class="flex justify-between items-center mt-5">
+    <span class="text-sm text-gray-400">via {{ story.data_source.code }}</span>
+    <div class="inline-flex">
+        {% if story.can_up %}
+            <form class="inline" method="post" data-on:submit="@post('/vote/up/{{ story.id }}', {contentType: 'form'})">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary mr-5">🤙🏼</button>
+            </form>
+        {% else %}
+            <button class="btn btn-disabled mr-5">🤙🏼</button>
+        {% endif %}
+
+        {% if story.can_down %}
+            <form class="inline" method="post" data-on:submit="@post('/vote/down/{{ story.id }}', {contentType: 'form'})">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">👎🏼</button>
+            </form>
+        {% else %}
+            <button class="btn btn-disabled">👎🏼</button>
+        {% endif %}
+    </div>
+    </div>
+</div>
