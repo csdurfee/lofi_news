@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from django.views.decorators.http import require_http_methods
 
 from .models import Story
 
@@ -23,7 +24,6 @@ def join(request):
     else:
         form = UserCreationForm()
     return render(request, 'frontend/join.html', {'form': form})
-
 
 def index(request):
     limit = request.GET.get('limit', 10)
@@ -60,7 +60,7 @@ def more(request):
             return no_stories()
         else:
             rendered = render_to_string('frontend/stories.html',
-                        {'stories': stories, 'request': request})
+                        {'stories': stories}, request=request)
             newLastId = stories[limit-1].id
 
             # not well documented, but you can just return an array
@@ -79,6 +79,7 @@ def more(request):
     else:
         return no_stories()
 
+@require_http_methods(['POST'])
 def vote(request, direction, story_id):
     # TODO: enforce POST only
     logger.info("entered vote")
@@ -86,7 +87,7 @@ def vote(request, direction, story_id):
     try:
         story_obj = Story.objects.get(id=story_id)
     except Story.DoesNotExist:
-        return HttpResponse("hoo boy")
+        raise Http404("story does not exist")
 
     # determine if vote exists, if not, register it
     # FIXME: replace these mock values with actual ones
@@ -96,9 +97,7 @@ def vote(request, direction, story_id):
         story_obj.can_down = lambda: False
 
     rendered = render_to_string("frontend/story_panel.html", 
-                                {'story': story_obj},
-                                request=request)
-
+                                {'story': story_obj}, request=request)
     return DatastarResponse(
         [
             SSE.patch_elements(rendered)
