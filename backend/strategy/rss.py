@@ -7,13 +7,18 @@ def fetch(url):
     feed = feedparser.parse(url)
     return feed
 
+def remove_links(text):
+    return re.sub(r'https?://\S+', '', text)
+
 def get_clean_text(raw_data):
     soup = BeautifulSoup(raw_data, 'html.parser')
     clean_text = soup.get_text() \
         .strip()
-    # TODO: fix no space after periods?
+    # TODO: fix no space after periods
     # regex: (\.)([A-Z]), replace with \1 \2 everywhere
     
+    clean_text = remove_links(clean_text)
+
     return clean_text
 
 def is_baloney(parsed):
@@ -21,7 +26,7 @@ def is_baloney(parsed):
     Filter out entries which are ads, etc.
     """
     # reddit nonsense
-    if re.search("contains content not supported", parsed.text):
+    if re.search("contains content not supported", parsed['text']):
         return True
     return False
 
