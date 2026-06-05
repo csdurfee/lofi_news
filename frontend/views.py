@@ -95,7 +95,9 @@ def vote(request, direction, story_id):
     if direction == "down":
         story_obj.can_down = lambda: False
 
-    rendered = render_to_string("frontend/story_panel.html", {'story': story_obj})
+    rendered = render_to_string("frontend/story_panel.html", 
+                                {'story': story_obj},
+                                request=request)
 
     return DatastarResponse(
         [
