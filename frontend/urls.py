@@ -10,6 +10,4 @@ urlpatterns = [
     path("join", views.join, name="join"),
     path("about", views.about, name="about"),
     path("vote/<direction>/<int:story_id>", views.vote),
-
-    path('hello-vite/', TemplateView.as_view(template_name='hello_vite.html'))
 ]
