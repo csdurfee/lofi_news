@@ -3,6 +3,8 @@ from django.urls import reverse
 
 
 class IndexViewTest(TestCase):
+    fixtures = ["DataSource", "Story"]
+
     def test_index_returns_200_with_content(self):
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
