@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.forms import UserCreationForm
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 
-from .models import Story
+from .models import Story, Vote
 
 from datastar_py.django import (DatastarResponse, read_signals)
 from datastar_py.django import ServerSentEventGenerator as SSE
@@ -33,9 +35,16 @@ def index(request):
     stories = Story.objects \
                 .select_related('data_source')[:limit]
     last_id = stories[limit-1].id
-    
+    story_ids = {story.id for story in stories}
+
+    # grab related votes
+    if request.user:
+        votes_on_page = Vote.by_user_and_stories(request.user.id, story_ids)
+    else:
+        votes_on_page = {}
     return render(request, 'frontend/index.html', 
                   {'stories': stories,
+                   'votes_on_page': votes_on_page,
                    'last_id': last_id})
 
 def about(request):
@@ -49,7 +58,7 @@ def no_stories():
     """
     return DatastarResponse(
                 SSE.remove_elements("#load-more")
-            )
+    )
 
 def more(request):
     signals = read_signals(request)
@@ -64,8 +73,15 @@ def more(request):
         if len(stories) == 0:
             return no_stories()
         else:
+            if request.user:
+                story_ids = {story.id for story in stories}
+                votes_on_page = Vote.by_user_and_stories(request.user.id, story_ids)
+            else:
+                votes_on_page = {}
             rendered = render_to_string('frontend/stories.html',
-                        {'stories': stories}, request=request)
+                        {'stories': stories,
+                         'votes_on_page': votes_on_page,
+                         }, request=request)
             newLastId = stories[limit-1].id
 
             # not well documented, but you can just return an array
@@ -84,25 +100,35 @@ def more(request):
     else:
         return no_stories()
 
+@login_required
 @require_http_methods(['POST'])
 def vote(request, direction, story_id):
     logger.info("entered vote")
     # get story for ID
     try:
-        story_obj = Story.objects.get(id=story_id)
+        story = Story.objects.get(id=story_id)
     except Story.DoesNotExist:
         raise Http404("story does not exist")
+    
+    # TODO: this should be a transaction block
+    votes = Vote.by_user_and_stories(user_id=request.user.id, 
+                                     story_ids=[story.id])
+    if story_id in votes:
+        return HttpResponseBadRequest("already voted, no take backsies")
 
-    # determine if vote exists, if not, register it
-    # FIXME: replace these mock values with actual ones
     if direction == "up":
-        # TODO: get or create the vote object
-        story_obj.can_up = lambda: False
+        v = Vote(user=request.user, story=story, direction = 1)
+        v.save()
+        votes[story.id] = [v]
+
     if direction == "down":
-        story_obj.can_down = lambda: False
+        v = Vote(user=request.user, story=story, direction = -1)
+        v.save()
+        votes[story.id] = v
 
     rendered = render_to_string("frontend/story_panel.html", 
-                                {'story': story_obj}, request=request)
+                                {'story': story,
+                                 'votes_on_page': votes}, request=request)
     return DatastarResponse(
         [
             SSE.patch_elements(rendered)

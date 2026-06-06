@@ -21,15 +21,8 @@ class Story(models.Model):
     raw_data = models.JSONField()
 
     def __str__(self):
-        return f"{self.data_source.code}: {self.title[:50]}"
+        return f"{self.data_source.code} #{self.id}: {self.title[:50]}"
 
-    def can_up(self):
-        # TODO implement this
-        return True
-
-    def can_down(self):
-        # TODO implement this
-        return True
 
 class Vote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -38,4 +31,22 @@ class Vote(models.Model):
     time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.direction} by {self.user} on {self.story}"
+        if self.direction > 0:
+            sign = "+"
+        else:
+            sign = ""
+        return f"{sign}{self.direction} by {self.user} on {self.story}"
+
+    # TODO: optimize/cache this if necessary
+    @classmethod
+    def by_user_and_stories(cls, user_id, story_ids):
+        """
+        returns associative array of story_id => vote.
+        """
+        votes = Vote.objects.filter(user_id=user_id, 
+                                    story_id__in=story_ids)
+        if votes:
+            votes_collated = {vote.story.id: vote for vote in votes}
+            return votes_collated
+        else:
+            return {}
