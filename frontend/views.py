@@ -100,7 +100,8 @@ def more(request):
     else:
         return no_stories()
 
-@login_required
+# FIXME: this is going to an unstyled page
+@login_required(login_url="/accounts/login")
 @require_http_methods(['POST'])
 def vote(request, direction, story_id):
     logger.info("entered vote")
