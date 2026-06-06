@@ -30,6 +30,7 @@ logging.basicConfig(
     format="{levelname} {asctime} {module} {message}",
     style="{"
     )
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logger = logging.getLogger(__name__)
 
 def main():

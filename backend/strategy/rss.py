@@ -37,7 +37,12 @@ def scrape(url):
     out = []
     raw_data = fetch(url)
     for entry in raw_data.entries:
-        raw_data = entry.content[0].value
+        if 'content' in entry:
+            # like reddit, yahoo
+            raw_data = entry.content[0].value
+        else:
+            # like espn
+            raw_data = entry.summary
 
         clean_text = get_clean_text(raw_data)
 
