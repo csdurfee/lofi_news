@@ -36,3 +36,6 @@ class Vote(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     direction = models.SmallIntegerField(choices={-1: "down", 1 : "up"})
     time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.direction} by {self.user} on {self.story}"
