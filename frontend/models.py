@@ -46,7 +46,12 @@ class Vote(models.Model):
         votes = Vote.objects.filter(user_id=user_id, 
                                     story_id__in=story_ids)
         if votes:
-            votes_collated = {vote.story.id: vote for vote in votes}
+            votes_collated = {vote.story_id: vote for vote in votes}
             return votes_collated
         else:
             return {}
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["story_id", "user_id"]),
+        ]

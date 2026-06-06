@@ -32,8 +32,9 @@ def index(request):
     # offset = request.GET.get('offset', 0)
 
     # oldest stories first
-    stories = Story.objects \
-                .select_related('data_source')[:limit]
+    stories = list(Story.objects \
+                .select_related('data_source')[:limit])
+
     last_id = stories[limit-1].id
     story_ids = {story.id for story in stories}
 
@@ -68,7 +69,7 @@ def more(request):
         lastId = signals['lastId']
         limit = 10
 
-        stories = Story.objects.filter(id__gt=lastId)[:limit]
+        stories = list(Story.objects.filter(id__gt=lastId)[:limit])
 
         if len(stories) == 0:
             return no_stories()
