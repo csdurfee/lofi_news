@@ -1,24 +1,31 @@
 <div id="button-panel-{{ story.id }}" class="flex justify-between items-center mt-5">
     <span class="text-sm text-gray-400">via {{ story.data_source.code }}</span>
-    <div class="inline-flex">
-        {% if story.id in votes_on_page.keys %}
-            <button class="btn btn-disabled mr-5">🤙🏼</button>
-        {% else %}       
-            <form class="inline" method="post" data-on:submit="@post('/vote/up/{{ story.id }}', {contentType: 'form'})">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary mr-5">🤙🏼</button>
-            </form>
-        {% endif %}
 
-        {% if story.id in votes_on_page.keys %}
-            <button class="btn btn-disabled">👎🏼</button>            
-        {% else %}
-            <form class="inline" method="post" data-on:submit="@post('/vote/down/{{ story.id }}', {contentType: 'form'})">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-secondary">👎🏼</button>
-            </form>
-        {% endif %}
-        
-  
-    </div>
+    {% if user.is_authenticated %}
+        <div class="inline-flex">
+            {% if story.id in votes_on_page.keys %}
+                <button class="btn btn-disabled mr-5">🤙🏼</button>
+            {% else %}       
+                <form class="inline" method="post" data-on:submit="@post('/vote/up/{{ story.id }}', {contentType: 'form'})">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mr-5">🤙🏼</button>
+                </form>
+            {% endif %}
+
+            {% if story.id in votes_on_page.keys %}
+                <button class="btn btn-disabled">👎🏼</button>
+            {% else %}
+                <form class="inline" method="post" data-on:submit="@post('/vote/down/{{ story.id }}', {contentType: 'form'})">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary">👎🏼</button>
+                </form>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="inline-flex underline-offset-4">
+            <a href="/join" class="hover:text-amber-300 hover:underline">Join</a>
+            &nbsp;/&nbsp;
+            <a href="/accounts/login" class="hover:text-amber-300 hover:underline">Login</a>&nbsp;to vote
+        </div>
+    {% endif %}
 </div>
