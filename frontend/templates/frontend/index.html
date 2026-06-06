@@ -1,20 +1,11 @@
-{% load django_vite %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.2/bundles/datastar.js"></script>
-
-    {% vite_hmr_client %}
-    {% vite_asset 'assets/style.css' %}
-    <title>lofi news</title>
-</head>
+{% include "frontend/head.html" %}
 <body class="font-mono dark dark:bg-black dark:text-white overflow-x-hidden">
-    {% include "frontend/body_header.html" %}
+    {% include "frontend/body_top_bar.html" %}
 
     {% if text_body %}
-        <div class="min-h-128 m-50">{{ text_body }}</div>
+        <div class="min-h-screen m-50">{{ text_body }}</div>
     {% else %}
         {% include "frontend/stories.html" %}
         <div id="load-more" data-signals:last-id="{{ last_id }}"

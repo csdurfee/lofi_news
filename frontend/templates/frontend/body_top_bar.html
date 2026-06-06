@@ -11,9 +11,14 @@
                 <button type="submit" class="inline-flex pl-5 hover:text-amber-300 transition-colors">Log out</button>
             </form>
         {% else %}
+            {% if page != 'login' %}
             <a class="inline-flex pl-5" href="/accounts/login/">Log in</a>
+            {% endif %}
+
+            {% if page != 'join' %}
             <a class="inline-flex pl-5 text-amber-300" href="/join">Join
             <span class="hidden min-[550px]:inline-flex">&nbsp;(it's free)</span></a>
+            {% endif %}
         {% endif %}
     </div>
 </header>

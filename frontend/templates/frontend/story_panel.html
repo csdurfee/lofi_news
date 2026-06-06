@@ -1,5 +1,5 @@
 <div id="button-panel-{{ story.id }}" class="flex justify-between items-center mt-5">
-    <span class="text-sm text-gray-400">via {{ story.data_source.code }}</span>
+    <span class="text-sm text-gray-400">via {{ story.data_source.code }} -- {{ story.retrieved }}</span>
 
     {% if user.is_authenticated %}
         <div class="inline-flex">

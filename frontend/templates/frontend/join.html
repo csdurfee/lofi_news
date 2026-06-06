@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Join – Lofi News</title>
-</head>
+{% include "frontend/head.html" %}
 <body class="font-mono dark dark:bg-black dark:text-white min-h-screen pb-10">
-    {% include "frontend/body_header.html" %}
+    {% include "frontend/body_top_bar.html" with page="join" %}
 
-    <main class="flex justify-center mt-20 px-4">
+    <main class="flex justify-center px-4">
         <div class="w-full max-w-sm">
             <h1 class="text-2xl font-bold mb-8">Create an account</h1>
 
