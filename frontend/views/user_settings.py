@@ -22,17 +22,16 @@ def doPost(request):
     """
     persist user settings.
     """
+    newTabs = 0
     if 'newTabs' in request.POST:
         logger.error(f"doPost: got newTabs with value {request.POST['newTabs']}")
         newTabs = request.POST['newTabs']
-        # FIXME: I need to deal with 'on', 'off' hewrerere
+
         if newTabs == 'on':
             newTabs = 1
-        else:
+        elif newTabs == 'off':
             newTabs = 0
-    else:
-        logger.error("doPost: newTabs off")
-        newTabs = 0
+
     request.session['newTabs'] = newTabs
     return _render_and_return(request, newTabs, patch_signal=True)
 

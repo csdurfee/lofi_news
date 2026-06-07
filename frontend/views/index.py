@@ -28,9 +28,6 @@ def index(request):
 
     # get user settings. TODO: factor out into own UserSettings component.
     new_tabs = request.session.get('newTabs', 0)
-    if new_tabs == 'on':
-        # WTF man fix this
-        new_tabs = 1
 
     logger.error(f"newTabs is {new_tabs}")
     return render(request, 'frontend/index.html', 
