@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import index, join, user_settings, vote
 
-
 urlpatterns = [
      path("",  index.index, name="index"),
      path("more", index.more, name="more"),

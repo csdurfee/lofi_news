@@ -1,4 +1,3 @@
-
 from django.http import Http404
 from django.views.decorators.http import require_http_methods
 from django.template.loader import render_to_string
@@ -9,7 +8,7 @@ from datastar_py.django import ServerSentEventGenerator as SSE
 import logging
 logger = logging.getLogger(__name__)
 
-DEFAULT_IS_CHECKED = False
+DEFAULT_NEW_TABS = False
 
 @require_http_methods(['GET', 'POST'])
 def user_settings(request):
@@ -49,15 +48,10 @@ def _render_and_return(request, new_tabs, patch_signal=False):
         )
         responses.append(new_signal)
 
-
     return DatastarResponse(responses)
 
 def doGet(request):
-    logger.error("got request %r" % request.POST)
-
-
-    new_tabs = DEFAULT_IS_CHECKED
-
+    new_tabs = DEFAULT_NEW_TABS
     if 'new_tabs' in request.session:
         logger.error(f"using new_tabs setting from request.session: {request.session['new_tabs']}")
         new_tabs = request.session['new_tabs']

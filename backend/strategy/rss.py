@@ -10,14 +10,15 @@ def fetch(url):
 def remove_links(text):
     return re.sub(r'https?://\S+', '', text)
 
+def fix_no_space_after_periods(text):
+    return re.sub(r"(\.)([A-Z])", r"\1 \2", text)
+
 def get_clean_text(raw_data):
     soup = BeautifulSoup(raw_data, 'html.parser')
     clean_text = soup.get_text() \
         .strip()
-    # TODO: fix no space after periods
-    # regex: (\.)([A-Z]), replace with \1 \2 everywhere
-    
     clean_text = remove_links(clean_text)
+    clean_text = fix_no_space_after_periods(clean_text)
 
     return clean_text
 

@@ -29,7 +29,7 @@ def index(request):
     # get user settings. TODO: factor out into own UserSettings component.
     new_tabs = request.session.get('new_tabs', 0)
 
-    logger.error(f"new_tabs is {new_tabs}")
+    logger.debug(f"new_tabs is {new_tabs}")
 
     return render(request, 'frontend/index.html', 
                   {'stories': stories,
@@ -44,7 +44,7 @@ def about(request):
 
 def no_stories():
     """
-    clears out the "load more" if there are no stories to load
+    patches out the "load more" if there are no stories to load
     """
     return DatastarResponse(
         SSE.remove_elements("#load-more")
@@ -89,5 +89,5 @@ def more(request):
                 ]
             )
     else:
-        logger.info("no signal received")
+        logger.debug("no signal received")
         return no_stories()
