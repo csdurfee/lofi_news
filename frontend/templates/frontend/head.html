@@ -9,4 +9,11 @@
     {% vite_hmr_client %}
     {% vite_asset 'assets/style.css' %}
     <title>{% block pagetitle %}lofi news{% endblock %}</title>
+    <!-- TODO: move into vite code-->
+    <script>
+        function openLink(evt, url) {
+            evt.preventDefault();
+            window.open(url, '_blank');
+        }
+    </script>
 </head>
