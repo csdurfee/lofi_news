@@ -11,7 +11,6 @@ class IndexViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.content), 0)
 
-
 class VoteViewTest(TestCase):
     def test_get_vote_returns_405(self):
         response = self.client.get("/vote/up/276")
@@ -26,11 +25,10 @@ class MoreViewTest(TestCase):
 
     def test_no_params_unsets_load_more(self):
         """
-        response should contain a datastar signal to stop
-        loading more on the client side
+        response without datastar param or header should contain
+        a datastar signal to stop loading more on the client side
         """
 
-        # sending request without signal should lead to error.
         response = self.client.get(reverse("more"))
 
         # ensure it's a datastar response and OK

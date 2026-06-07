@@ -11,7 +11,7 @@ from datastar_py.django import ServerSentEventGenerator as SSE
 import logging
 logger = logging.getLogger(__name__)
 
-# FIXME: this is going to an unstyled page right now (I think it's datastar's fault)
+# FIXME: @login_required is going to an unstyled login page right now (I think it's datastar's fault)
 @require_http_methods(['POST'])
 @login_required(login_url="/accounts/login")
 def vote(request, direction, story_id):

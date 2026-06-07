@@ -5,7 +5,11 @@
             <a href="/about">About</a>
         </span>
         {% if user.is_authenticated %}
-            <span class="inline-flex pl-5 text-gray-400">{{ user.username }}</span>
+
+            <button type="submit" class="pl-5 text-gray-400 hover:text-amber-300 hover:underline"
+                data-on:click="@get('/settings')">{{ user.username }}
+            </button>
+
             <form class="inline" method="post" action="/accounts/logout/">
                 {% csrf_token %}
                 <button type="submit" class="inline-flex pl-5 hover:text-amber-300 transition-colors">Log out</button>
@@ -22,3 +26,6 @@
         {% endif %}
     </div>
 </header>
+<div id="settings" class="hidden">
+    Loading...
+</div>
