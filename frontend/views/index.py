@@ -25,10 +25,15 @@ def index(request):
         votes_on_page = Vote.by_user_and_stories(request.user.id, story_ids)
     else:
         votes_on_page = {}
+
+    # get user settings. TODO: factor out into own UserSettings component.
+    new_tabs = request.session.get('newTabs', 0)
+    logger.error(f"newTabs is {new_tabs}")
     return render(request, 'frontend/index.html', 
                   {'stories': stories,
                    'votes_on_page': votes_on_page,
-                   'last_id': last_id})
+                   'last_id': last_id,
+                   'new_tabs': new_tabs})
 
 def about(request):
     text_body = "this page left intentionally blank"

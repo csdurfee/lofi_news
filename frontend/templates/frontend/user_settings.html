@@ -2,10 +2,14 @@
     <fieldset class="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4">
         <legend class="fieldset-legend">Settings</legend>
         <label class="label">
-                <input type="checkbox" checked="checked"
+            <form class="inline" method="post" data-on:change="@post('/settings', {contentType: 'form'})">
+                {% csrf_token %}
+                <input type="checkbox" checked="{{ new_tabs }}"
                 data-bind="newTabs"
                 class="checkbox" />
+                
                 Open links in new tabs?
+            </form>
         </label>
     </fieldset>
 </div>
