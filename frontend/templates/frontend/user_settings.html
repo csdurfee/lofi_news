@@ -1,15 +1,13 @@
 <div id="settings" class="pl-5">
-    <fieldset class="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4">
-        <legend class="fieldset-legend">Settings</legend>
-        <label class="label">
-            <form class="inline" method="post" data-on:change="@post('/settings', {contentType: 'form'})">
-                {% csrf_token %}
-                <input type="checkbox" checked="{{ new_tabs }}"
-                data-bind="newTabs"
-                class="checkbox" />
-                
-                Open links in new tabs?
-            </form>
-        </label>
-    </fieldset>
+    <form class="inline" method="post" data-on:change="@post('/settings', {contentType: 'form'})">
+        {% csrf_token %}
+        <fieldset class="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4">
+            <legend class="fieldset-legend">Settings</legend>
+            <label class="label">
+                    <input type="checkbox" data-bind="_newTabs" name="newTabs" 
+                    class="checkbox"  />
+                    Open links in new tabs?
+            </label>
+        </fieldset>
+    </form>
 </div>
