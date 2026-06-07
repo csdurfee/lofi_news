@@ -17,9 +17,12 @@ def user_settings(request):
     else:
         return doGet(request)
 
+def doGet(request):
+    return _render_and_return(request)
+
 def doPost(request):
     """
-    persist user settings.
+    persist user settings and send patch signal
     """
     new_tabs = 0
     if 'new_tabs' in request.POST:
@@ -34,7 +37,7 @@ def doPost(request):
     request.session['new_tabs'] = new_tabs
     return _render_and_return(request, new_tabs, patch_signal=True)
 
-def _render_and_return(request, new_tabs, patch_signal=False):
+def _render_and_return(request, new_tabs=None, patch_signal=False):
     rendered = render_to_string("frontend/user_settings.html", request=request)
     
     responses = [
@@ -50,10 +53,3 @@ def _render_and_return(request, new_tabs, patch_signal=False):
 
     return DatastarResponse(responses)
 
-def doGet(request):
-    new_tabs = DEFAULT_NEW_TABS
-    if 'new_tabs' in request.session:
-        logger.error(f"using new_tabs setting from request.session: {request.session['new_tabs']}")
-        new_tabs = request.session['new_tabs']
-
-    return _render_and_return(request, new_tabs)

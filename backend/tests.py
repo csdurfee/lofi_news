@@ -1,8 +1,11 @@
-from django.test import TestCase
+import unittest
 
 from backend.strategy import rss
 
-class RSSProcessingTest(TestCase):
+class RSSProcessingTest(unittest.TestCase):
+    """
+    these don't touch the database, so it's not using the django TestCase class.
+    """
     def test_removes_links(self):
         test_str = "https://example.com for more details"
         cleaned = rss.remove_links(test_str)
