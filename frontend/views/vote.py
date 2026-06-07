@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 
-from ..models import Story, Vote
+from frontend.models import Story, Vote
 
 from datastar_py.django import (DatastarResponse, read_signals)
 from datastar_py.django import ServerSentEventGenerator as SSE
@@ -12,8 +12,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 # FIXME: this is going to an unstyled page right now (I think it's datastar's fault)
-@login_required(login_url="/accounts/login")
 @require_http_methods(['POST'])
+@login_required(login_url="/accounts/login")
 def vote(request, direction, story_id):
     logger.debug("entered vote")
     try:

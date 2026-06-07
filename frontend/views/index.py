@@ -1,6 +1,7 @@
 from frontend.models import Story, Vote
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_http_methods
 
 from datastar_py.django import (DatastarResponse, read_signals)
 from datastar_py.django import ServerSentEventGenerator as SSE
@@ -14,14 +15,12 @@ def index(request):
     if limit > 100:
         limit = 100
 
-    # newest stories first
     stories = list(Story.objects.order_by("-id") \
                 .select_related('data_source')[:limit])
 
     last_id = stories[limit-1].id
     story_ids = {story.id for story in stories}
 
-    # grab related votes
     if request.user:
         votes_on_page = Vote.by_user_and_stories(request.user.id, story_ids)
     else:
@@ -41,12 +40,13 @@ def no_stories():
     clears out the "load more" if there are no stories to load
     """
     return DatastarResponse(
-                SSE.remove_elements("#load-more")
+        SSE.remove_elements("#load-more")
     )
 
+@require_http_methods(['GET'])
 def more(request):
     signals = read_signals(request)
-    logger.error("signals is %r" % signals)
+    logger.debug("got request %r" % request)
 
     if signals and ('lastId' in signals):
         lastId = signals['lastId']
@@ -68,18 +68,19 @@ def more(request):
                          }, request=request)
             newLastId = stories[limit-1].id
 
-            # not well documented, but you can just return an array
-            # to DatastarResponse.
+            # we can just return an array to DatastarResponse.
             return DatastarResponse(
                 [
                 SSE.patch_elements(rendered,
                                     selector="#stories",
-                                    mode=ElementPatchMode.APPEND),
+                                    mode=ElementPatchMode.APPEND
+                ),
                 # note: it's NOT kebab case for signals sent from server
                 SSE.patch_signals(
                             {"lastId": newLastId }
-                        )
+                ),
                 ]
             )
     else:
+        logger.info("no signal received")
         return no_stories()
