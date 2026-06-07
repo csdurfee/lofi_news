@@ -27,9 +27,10 @@ def index(request):
         votes_on_page = {}
 
     # get user settings. TODO: factor out into own UserSettings component.
-    new_tabs = request.session.get('newTabs', 0)
+    new_tabs = request.session.get('new_tabs', 0)
 
-    logger.error(f"newTabs is {new_tabs}")
+    logger.error(f"new_tabs is {new_tabs}")
+
     return render(request, 'frontend/index.html', 
                   {'stories': stories,
                    'votes_on_page': votes_on_page,

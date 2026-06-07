@@ -22,18 +22,18 @@ def doPost(request):
     """
     persist user settings.
     """
-    newTabs = 0
-    if 'newTabs' in request.POST:
-        logger.error(f"doPost: got newTabs with value {request.POST['newTabs']}")
-        newTabs = request.POST['newTabs']
+    new_tabs = 0
+    if 'new_tabs' in request.POST:
+        logger.error(f"doPost: got new_tabs with value {request.POST['new_tabs']}")
+        new_tabs = request.POST['new_tabs']
 
-        if newTabs == 'on':
-            newTabs = 1
-        elif newTabs == 'off':
-            newTabs = 0
+        if new_tabs == 'on':
+            new_tabs = 1
+        elif new_tabs == 'off':
+            new_tabs = 0
 
-    request.session['newTabs'] = newTabs
-    return _render_and_return(request, newTabs, patch_signal=True)
+    request.session['new_tabs'] = new_tabs
+    return _render_and_return(request, new_tabs, patch_signal=True)
 
 def _render_and_return(request, new_tabs, patch_signal=False):
     rendered = render_to_string("frontend/user_settings.html", request=request)
@@ -55,20 +55,11 @@ def _render_and_return(request, new_tabs, patch_signal=False):
 def doGet(request):
     logger.error("got request %r" % request.POST)
 
-    signals = read_signals(request)
-    
-    # TODO: factor this newTabs logic out
-    #  and write some tests for this.
 
-    # if newTabs signal comes in, it wins, and we update the session
-    newTabs = DEFAULT_IS_CHECKED
-    if signals and ('newTabs' in signals):
-        request.session['newTabs'] = signals['newTabs']
-        logger.error(f"signals: setting newTabs to {signals['newTabs']}")
-        newTabs = signals['newTabs']
-    # otherwise, we use the session's newTabs setting
-    if 'newTabs' in request.session:
-        logger.error(f"using newTabs setting from request.session: {request.session['newTabs']}")
-        newTabs = request.session['newTabs']
+    new_tabs = DEFAULT_IS_CHECKED
 
-    return _render_and_return(request, newTabs)
+    if 'new_tabs' in request.session:
+        logger.error(f"using new_tabs setting from request.session: {request.session['new_tabs']}")
+        new_tabs = request.session['new_tabs']
+
+    return _render_and_return(request, new_tabs)
