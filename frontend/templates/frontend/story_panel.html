@@ -4,20 +4,20 @@
     {% if user.is_authenticated %}
         <div class="inline-flex">
             {% if story.id in votes_on_page.keys %}
-                <button class="btn btn-disabled mr-5">🤙🏼</button>
+                <button class="btn btn-disabled mr-5">Save</button>
             {% else %}       
                 <form class="inline" method="post" data-on:submit="@post('/vote/up/{{ story.id }}', {contentType: 'form'})">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-primary mr-5">🤙🏼</button>
+                    <button type="submit" class="btn save-btn mr-5">Save</button>
                 </form>
             {% endif %}
 
             {% if story.id in votes_on_page.keys %}
-                <button class="btn btn-disabled">👎🏼</button>
+                <button class="btn btn-disabled">Skip</button>
             {% else %}
                 <form class="inline" method="post" data-on:submit="@post('/vote/down/{{ story.id }}', {contentType: 'form'})">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-secondary">👎🏼</button>
+                    <button type="submit" class="btn skip-btn btn-secondary">Skip</button>
                 </form>
             {% endif %}
         </div>

@@ -1,12 +1,12 @@
 <header class="flex justify-between items-center">
     <div class="inline-flex items-center p-5 text-3xl"><a href="/">Lofi <span class="font-bold">News</span></a></div>
     <div class="pr-5">
-        <span class="hidden min-[550px]:inline-flex">
+        <span class="hidden min-[550px]:inline-flex hover:text-amber-300">
             <a href="/about">About</a>
         </span>
         {% if user.is_authenticated %}
 
-            <button type="submit" class="pl-5 text-gray-400 hover:text-amber-300 hover:underline"
+            <button type="submit" class="pl-5 text-gray-400 hover:text-amber-300"
                 data-on:click="@get('/settings')">{{ user.username }}
             </button>
 
@@ -16,7 +16,7 @@
             </form>
         {% else %}
             {% if page != 'login' %}
-            <a class="inline-flex pl-5" href="/accounts/login/">Log in</a>
+            <a class="inline-flex pl-5 hover:text-amber-300" href="/accounts/login/">Log in</a>
             {% endif %}
 
             {% if page != 'join' %}

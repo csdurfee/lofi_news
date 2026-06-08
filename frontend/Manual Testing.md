@@ -1,5 +1,7 @@
 ### need to specify host!
 
+only when running on command line, not a problem in running tests.
+
 it gets blocked unless you set server name to localhost
 (ipv6 issue? I have localhost whitelisted in settings)
 

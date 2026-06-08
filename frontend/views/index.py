@@ -53,7 +53,7 @@ def no_stories():
 @require_http_methods(['GET'])
 def more(request):
     signals = read_signals(request)
-    logger.debug("got request %r" % request)
+    logger.info("got signals %r" % signals)
 
     if signals and ('lastId' in signals):
         lastId = signals['lastId']
