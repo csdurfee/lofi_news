@@ -8,8 +8,14 @@
         <div class="min-h-screen m-50">{{ text_body }}</div>
     {% else %}
         {% include "frontend/stories.html" %}
-        <div id="load-more" data-signals:last-id="{{ last_id }}"
+
+        {% if source_code %}
+            <div id="load-more" data-signals:last-id="{{ last_id }}"
+            data-on-intersect="@get('/more/{{ source_code }}')">Loading...</div>
+        {% else %}
+            <div id="load-more" data-signals:last-id="{{ last_id }}"
             data-on-intersect="@get('/more')">Loading...</div>
+        {% endif %}
     {% endif %}
 </body>
 </html>

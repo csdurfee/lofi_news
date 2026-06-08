@@ -1,6 +1,7 @@
 <div id="button-panel-{{ story.id }}" class="flex justify-between items-center mt-5">
     <span class="text-sm text-gray-400">via 
-        <a class="underline hover:text-amber-300" href="/source/{{story.data_source.code}}">{{ story.data_source.code }}</a> -- {{ story.retrieved }}
+        <a class="underline hover:text-amber-300"
+            href="/source/{{story.data_source.code}}">{{ story.data_source.code }}</a> -- {{ story.retrieved }}
     </span>
 
     {% if user.is_authenticated %}

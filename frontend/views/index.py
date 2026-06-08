@@ -12,12 +12,10 @@ from frontend.models import Story, Vote, DataSource
 import logging
 logger = logging.getLogger(__name__)
 
-ALL_SOURCES = 1
 
-def _get_stories(order_by="-id", limit=10, sources=ALL_SOURCES, last_id=None):
-    # TODO: refactor this so I can dynamically add filters, so it works with /more
+def _get_stories(order_by="-id", limit=10, sources=None, last_id=None):
     query = Story.objects.order_by(order_by)
-    if sources != ALL_SOURCES:
+    if sources != None:
         query = query.filter(data_source__in=sources)
     if last_id:
         query = query.filter(id__lt=last_id)
@@ -31,16 +29,15 @@ def index(request, source_code=None):
     limit = 10
 
     if source_code == None:
-        stories = _get_stories(limit=limit)
+        sources = None
     else:
-        # get ID for source
         sources = DataSource.objects.filter(code=source_code)
         if len(sources) == 0:
             return HttpResponseNotFound()
-        else:
-            stories = _get_stories(limit=limit, sources=sources)
+        
+    stories = _get_stories(limit=limit, sources=sources)
 
-    last_id = stories[limit-1].id
+    last_id = stories[len(stories) - 1].id
     story_ids = {story.id for story in stories}
 
     if request.user:
@@ -55,7 +52,9 @@ def index(request, source_code=None):
                   {'stories': stories,
                    'votes_on_page': votes_on_page,
                    'last_id': last_id,
-                   'new_tabs': int(new_tabs)})
+                   'new_tabs': int(new_tabs),
+                   'source_code': source_code,
+                   })
 
 def about(request):
     text_body = "this page left intentionally blank"
@@ -71,7 +70,7 @@ def no_stories():
     )
 
 @require_http_methods(['GET'])
-def more(request, sources=ALL_SOURCES):
+def more(request, source_code=None):
     signals = read_signals(request)
     logger.info("got signals %r" % signals)
 
@@ -79,7 +78,15 @@ def more(request, sources=ALL_SOURCES):
         last_id = signals['lastId']
         limit = 10
 
-        stories = _get_stories(sources=sources, limit=limit, last_id=last_id)
+        if source_code:
+            sources = DataSource.objects.filter(code=source_code)
+            if len(sources) == 0:
+                return HttpResponseNotFound()
+        else:
+            sources = None
+
+        stories = _get_stories(limit=limit, last_id=last_id,
+                               sources=sources)
 
         if len(stories) == 0:
             return no_stories()
@@ -92,8 +99,10 @@ def more(request, sources=ALL_SOURCES):
             rendered = render_to_string('frontend/stories.html',
                         {'stories': stories,
                          'votes_on_page': votes_on_page,
+                         'source_code': source_code,
                          }, request=request)
-            new_last_id = stories[limit-1].id
+
+            new_last_id = stories[len(stories) - 1].id
 
             # we can just return an array to DatastarResponse.
             return DatastarResponse(
