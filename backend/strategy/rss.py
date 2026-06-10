@@ -29,6 +29,9 @@ def is_baloney(parsed):
     # reddit nonsense
     if re.search("contains content not supported", parsed['text']):
         return True
+    # empty bodies
+    if len(parsed['text']) < 20:
+        return True
     return False
 
 def scrape(url):

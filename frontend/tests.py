@@ -3,6 +3,54 @@ from django.urls import reverse
 
 from datastar_py.django import DatastarResponse
 
+class LoginTest(TestCase):
+    TEST_USER = "testing"
+    CORRECT_PASSWORD = "obviouspw314"
+    WRONG_PASSWORD = "somethingelse123"
+
+    fixtures = ["User"]
+
+    def test_login_with_correct_password(self):
+        response = self.client.post('/accounts/login/', {
+            'username': self.TEST_USER,
+            'password': self.CORRECT_PASSWORD,
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_logout(self):
+        self.client.login(username=self.TEST_USER, password=self.CORRECT_PASSWORD)
+        response = self.client.post('/accounts/logout/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_with_wrong_password(self):
+        response = self.client.post('/accounts/login/', {
+            'username': self.TEST_USER,
+            'password': self.WRONG_PASSWORD,
+        })
+        self.assertEqual(response.status_code, 200)
+
+
+class JoinViewTest(TestCase):
+    def test_get_join_returns_200(self):
+        response = self.client.get(reverse("join"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_valid_registration_redirects(self):
+        response = self.client.post(reverse("join"), {
+            'username': 'newuser',
+            'password1': 'complexpassword99!',
+            'password2': 'complexpassword99!',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_mismatched_passwords_returns_200(self):
+        response = self.client.post(reverse("join"), {
+            'username': 'newuser',
+            'password1': 'complexpassword99!',
+            'password2': 'wrongpassword99!',
+        })
+        self.assertEqual(response.status_code, 200)
+
 class IndexViewTest(TestCase):
     fixtures = ["DataSource", "Story"]
 

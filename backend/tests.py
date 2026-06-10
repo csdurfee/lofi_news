@@ -18,11 +18,15 @@ class RSSProcessingTest(unittest.TestCase):
 
     def test_filters_baloney(self):
         mock_parsed = {}
-        mock_parsed['text'] = "This contains content not supported"
 
+        mock_parsed['text'] = "This contains content not supported so it is baloney even though it's long enough"
         baloney_result = rss.is_baloney(mock_parsed)
         self.assertEqual(baloney_result, True)
 
-        mock_parsed['text'] = "This text is OK"
+        mock_parsed['text'] = "This text is OK because it is long enough to be considered a good story"
         baloney_result = rss.is_baloney(mock_parsed)
         self.assertEqual(baloney_result, False)
+
+        mock_parsed['text'] = "Too short"
+        baloney_result = rss.is_baloney(mock_parsed)
+        self.assertEqual(baloney_result, True)
