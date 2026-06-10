@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def _get_stories(order_by="-id", limit=10, sources=None, last_id=None):
     query = Story.objects.order_by(order_by)
-    if sources != None:
+    if sources is not None:
         query = query.filter(data_source__in=sources)
     if last_id:
         query = query.filter(id__lt=last_id)
@@ -28,7 +28,7 @@ def _get_stories(order_by="-id", limit=10, sources=None, last_id=None):
 def index(request, source_code=None):
     limit = 10
 
-    if source_code == None:
+    if source_code is None:
         sources = None
     else:
         sources = DataSource.objects.filter(code=source_code)

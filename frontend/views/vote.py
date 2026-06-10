@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 
 from frontend.models import Story, Vote
 
-from datastar_py.django import (DatastarResponse, read_signals)
+from datastar_py.django import (DatastarResponse)
 from datastar_py.django import ServerSentEventGenerator as SSE
 
 import logging
