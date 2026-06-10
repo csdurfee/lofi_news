@@ -20,8 +20,8 @@ def vote(request, direction, story_id):
         story = Story.objects.get(id=story_id)
     except Story.DoesNotExist:
         raise Http404("story does not exist")
-    
-    votes = Vote.by_user_and_stories(user_id=request.user.id, 
+
+    votes = Vote.by_user_and_stories(user_id=request.user.id,
                                      story_ids=[story.id])
     if story_id in votes:
         return HttpResponseBadRequest("already voted, no take backsies")
@@ -36,7 +36,7 @@ def vote(request, direction, story_id):
         v.save()
         votes[story.id] = [v]
 
-    rendered = render_to_string("frontend/story_panel.html", 
+    rendered = render_to_string("frontend/story_panel.html",
                                 {'story': story,
                                  'votes_on_page': votes}, request=request)
     return DatastarResponse(

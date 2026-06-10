@@ -84,7 +84,7 @@ class MoreViewTest(TestCase):
 
         # ensure contains removal signal
         self.assertContains(response, "data: mode remove", status_code=200)
-        
+
         # it's a streaming response, so we need to refetch
         response = self.client.get(reverse("more"))
         self.assertContains(response, "data: selector #load-more")

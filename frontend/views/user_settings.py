@@ -38,7 +38,7 @@ def doPost(request):
 
 def _render_and_return(request, new_tabs=None, patch_signal=False):
     rendered = render_to_string("frontend/user_settings.html", request=request)
-    
+
     responses = [
         SSE.patch_elements(rendered)
     ]

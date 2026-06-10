@@ -43,7 +43,7 @@ class Vote(models.Model):
         """
         returns associative array of story_id => vote.
         """
-        votes = Vote.objects.filter(user_id=user_id, 
+        votes = Vote.objects.filter(user_id=user_id,
                                     story_id__in=story_ids)
         if votes:
             votes_collated = {vote.story_id: vote for vote in votes}

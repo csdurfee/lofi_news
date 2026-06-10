@@ -19,7 +19,7 @@ def _get_stories(order_by="-id", limit=10, sources=None, last_id=None):
         query = query.filter(data_source__in=sources)
     if last_id:
         query = query.filter(id__lt=last_id)
-    
+
     stories = list(query.select_related('data_source')[:limit])
 
     return stories
@@ -34,7 +34,7 @@ def index(request, source_code=None):
         sources = DataSource.objects.filter(code=source_code)
         if len(sources) == 0:
             return HttpResponseNotFound()
-        
+
     stories = _get_stories(limit=limit, sources=sources)
 
     last_id = stories[len(stories) - 1].id
@@ -48,7 +48,7 @@ def index(request, source_code=None):
     # get user settings. TODO: factor out into own UserSettings component.
     new_tabs = request.session.get('new_tabs', 0)
 
-    return render(request, 'frontend/index.html', 
+    return render(request, 'frontend/index.html',
                   {'stories': stories,
                    'votes_on_page': votes_on_page,
                    'last_id': last_id,

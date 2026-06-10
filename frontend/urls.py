@@ -4,7 +4,7 @@ from .views import index, join, user_settings, vote
 
 urlpatterns = [
      path("",  index.index, name="index"),
-     
+
      path("more/<source_code>", index.more, name="source_more"),
      path("more", index.more, name="more"),
 
