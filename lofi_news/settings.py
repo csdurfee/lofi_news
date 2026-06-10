@@ -136,4 +136,9 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # allow local overrides that shouldn't go into github.
-from .local_settings import *
+# this file isn't in github, by design.
+
+try:
+    from .local_settings import *
+except ModuleNotFoundError:
+    pass
