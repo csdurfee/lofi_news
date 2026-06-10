@@ -16,5 +16,3 @@ dependencies = [
 select = ["E", "F", "W"]
 ignore = ["E402", "E501", "F403"]
 
-[tool.uv]
-pip-compile-output = "requirements.txt"
