@@ -2,6 +2,16 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
+class UserProfile(models.Model):
+    DEFAULT_SETTINGS = dict(new_tabs=True)
+
+    user = models.OneToOneField(User, related_name='profile', 
+                                on_delete=models.CASCADE)
+    settings = models.JSONField('settings', default=dict)
+    
+    def __str__(self):
+        return 'Profile of user: {}'.format(self.user.username)
+
 class DataSource(models.Model):
     code = models.CharField(max_length=30)
     type = models.CharField(max_length=20)
