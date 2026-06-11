@@ -50,5 +50,10 @@ def _render_and_return(request, new_tabs=None, patch_signal=False):
         )
         responses.append(new_signal)
 
+    # hide settings button
+    responses.append(
+        SSE.remove_elements("#settings-btn")
+    )
+
     return DatastarResponse(responses)
 

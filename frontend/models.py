@@ -37,7 +37,6 @@ class Vote(models.Model):
             sign = ""
         return f"{sign}{self.direction} by {self.user} on {self.story}"
 
-    # TODO: optimize/cache this if necessary
     @classmethod
     def by_user_and_stories(cls, user_id, story_ids):
         """

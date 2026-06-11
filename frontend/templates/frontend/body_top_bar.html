@@ -25,10 +25,21 @@
 
 {% if user.is_authenticated %}
 <div class="flex pl-5">
-    Logged in as {{ user.username }}.
-    <button type="submit" class="pl-3 text-amber-300"
-        data-on:click="@get('/settings')">Change settings
-    </button>
+
+    <span class="pt-2">
+        Hi, {{ user.username }}.
+    </span>
+
+    <span class="ml-5" id="settings-btn">
+        <button type="submit" class="btn btn-outline pl-3 text-amber-300"
+            data-on:click="@get('/settings')">Settings
+        </button>
+    </span>
+    <span class="ml-5" id="saved-btn">
+        <a class="btn btn-outline pl-3 text-amber-300"
+            href="/saved">Saved
+        </a>
+    </span>
 </div>
 {% endif %}
 {% comment %}NOTE: the data-signals here should contain initial settings for all 
