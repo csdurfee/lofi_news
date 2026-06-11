@@ -5,25 +5,33 @@
     </span>
 
     {% if user.is_authenticated %}
-        <div class="inline-flex">
-            {% if story.id in votes_on_page.keys %}
-                <button class="btn btn-disabled mr-5">Save</button>
-            {% else %}       
-                <form class="inline" method="post" data-on:submit="@post('/vote/up/{{ story.id }}', {contentType: 'form'})">
-                    {% csrf_token %}
-                    <button type="submit" class="btn save-btn mr-5">Save</button>
-                </form>
-            {% endif %}
+        {% if saved_view %}
+            <div class="inline-flex">
+                <button type="submit" data-on:click="@delete('/vote/delete/{{ story.id }}', {headers: {'X-CSRFToken': $_csrf}} )" 
+                    class="btn btn-secondary mr-5">Un-save</button>
+            </div>
+        {% else %}
+            <div class="inline-flex">
+                {% if story.id in votes_on_page.keys %}
+                    <button class="btn btn-disabled mr-5">Save</button>
+                {% else %}       
+                    <form class="inline" method="post" data-on:submit="@post('/vote/up/{{ story.id }}', {contentType: 'form'})">
+                        {% csrf_token %}
+                        <button type="submit" class="btn save-btn mr-5">Save</button>
+                    </form>
+                {% endif %}
 
-            {% if story.id in votes_on_page.keys %}
-                <button class="btn btn-disabled">Skip</button>
-            {% else %}
-                <form class="inline" method="post" data-on:submit="@post('/vote/down/{{ story.id }}', {contentType: 'form'})">
-                    {% csrf_token %}
-                    <button type="submit" class="btn skip-btn btn-secondary">Skip</button>
-                </form>
-            {% endif %}
-        </div>
+                {% if story.id in votes_on_page.keys %}
+                    <button class="btn btn-disabled">Skip</button>
+                {% else %}
+                    <form class="inline" method="post" data-on:submit="@post('/vote/down/{{ story.id }}', {contentType: 'form'})">
+                        {% csrf_token %}
+                        <button type="submit" class="btn skip-btn btn-secondary">Skip</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+        
     {% else %}
         <div class="inline-flex underline-offset-4">
             <a href="/join" class="hover:text-amber-300 hover:underline">Join</a>

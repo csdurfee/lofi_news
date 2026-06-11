@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 {% include "frontend/head.html" %}
-<body class="font-mono dark dark:bg-black dark:text-white overflow-x-hidden">
+<body data-signals:_csrf="'{{ csrf_token }}'"
+      class="font-mono dark dark:bg-black dark:text-white overflow-x-hidden">
     {% include "frontend/body_top_bar.html" %}
 
     {% if text_body %}
         <div class="min-h-screen m-50">{{ text_body }}</div>
     {% else %}
         {% if saved_view %}
-          <h1 class="p-5 text-2xl">Saved stories</h1>
+          <h1 class="p-5 text-[2rem] text-amber-300">Saved stories</h1>
         {% endif %}
         {% include "frontend/stories.html" %}
 

@@ -51,9 +51,12 @@ def _render_and_return(request, new_tabs=None, patch_signal=False):
         responses.append(new_signal)
 
     # hide settings button
-    responses.append(
-        SSE.remove_elements("#settings-btn")
-    )
+    # this should not be done if request is POST because
+    # the button is already gone.
+    if request.method == "GET":
+        responses.append(
+            SSE.remove_elements("#settings-btn")
+        )
 
     return DatastarResponse(responses)
 
