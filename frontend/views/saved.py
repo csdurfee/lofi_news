@@ -4,8 +4,6 @@ from django.template.loader import render_to_string
 
 from frontend.models import Vote, Story
 
-from datastar_py.django import (DatastarResponse)
-from datastar_py.django import ServerSentEventGenerator as SSE
 
 @login_required(login_url="/accounts/login")
 def saved(request):
@@ -38,5 +36,5 @@ def _return_json(saved_stories):
         }
         for s in saved_stories
     ]
-    return JsonResponse(data, safe=False, 
+    return JsonResponse(data, safe=False,
                         json_dumps_params={'indent': 2})

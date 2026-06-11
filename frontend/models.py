@@ -1,14 +1,30 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from django.contrib.auth.models import User
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """
+    ensure a UserProfile is created whenever a User is created.
+    """
+    if created:
+        UserProfile.objects.get_or_create(user=instance)
+
+def user_profile_default_value():
+    return {
+        'new_tabs': True
+    }
 
 class UserProfile(models.Model):
     DEFAULT_SETTINGS = dict(new_tabs=True)
 
-    user = models.OneToOneField(User, related_name='profile', 
+    user = models.OneToOneField(User, related_name='profile',
                                 on_delete=models.CASCADE)
-    settings = models.JSONField('settings', default=dict)
-    
+    settings = models.JSONField('settings',
+                                default=user_profile_default_value)
+
     def __str__(self):
         return 'Profile of user: {}'.format(self.user.username)
 

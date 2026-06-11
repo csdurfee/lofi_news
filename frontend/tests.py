@@ -1,7 +1,30 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
+from frontend.models import UserProfile, user_profile_default_value
+
 from datastar_py.django import DatastarResponse
+
+class UserProfileSignalTest(TestCase):
+    def test_profile_created_with_user(self):
+        user = User.objects.create_user(username='signaltest', password='pw123!')
+        self.assertTrue(UserProfile.objects.filter(user=user).exists())
+
+    def test_user_profile_usable(self):
+        """
+        Ensure user profile is created with default settings and works correctly.
+        """
+        user = User.objects.create_user(username='signaltest', password='pw123!')
+        user_id = user.id
+        self.assertDictEqual(user.profile.settings,
+                             user_profile_default_value())
+
+        user.profile.settings['testkey'] = 'testvalue'
+        user.profile.save()
+
+        user2 = User.objects.get(id=user_id)
+        self.assertTrue(user2.profile.settings['testkey'], 'testvalue')
 
 class LoginTest(TestCase):
     TEST_USER = "testing"
