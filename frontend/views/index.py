@@ -36,7 +36,7 @@ def _get_stories(request, source_code=None):
     return stories
 
 def _get_votes(request, story_ids=None):
-    if request.user:
+    if request.user and story_ids:
         votes_on_page = Vote.by_user_and_stories(request.user.id, story_ids)
     else:
         votes_on_page = {}
@@ -62,6 +62,9 @@ def _render_datastar(request, stories, votes_on_page,
                          'source_code': source_code,
                          }, request=request)
 
+    if len(stories) == 0:
+        return _no_stories()
+
     new_last_id = stories[len(stories) - 1].id
 
     return DatastarResponse(
@@ -76,6 +79,14 @@ def _render_datastar(request, stories, votes_on_page,
                     {"lastId": new_last_id }
         ),
         ]
+    )
+
+def _no_stories():
+    """
+    patches out the "load more" if there are no stories to load
+    """
+    return DatastarResponse(
+        SSE.remove_elements("#load-more")
     )
 
 
@@ -100,8 +111,15 @@ def index(request, source_code=None, more=False):
         return _render_html(request, stories, votes_on_page,
                                 last_id, new_tabs, source_code)
 
+@require_http_methods(['GET'])
 def more(request, source_code=None):
-    return index(request, source_code=source_code, more=True)
+    # this needs to check if signal exists.
+    # if it doesn't, return no more stories to stop load more
+    signals = read_signals(request)
+    if not signals:
+        return _no_stories()
+    else:
+        return index(request, source_code=source_code, more=True)
 
 def about(request):
     text_body = "this page left intentionally blank"
