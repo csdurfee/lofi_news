@@ -7,8 +7,8 @@
     {% if user.is_authenticated %}
         {% if saved_view %}
             <div class="inline-flex">
-                <button type="submit" data-on:click="@delete('/vote/delete/{{ story.id }}', {headers: {'X-CSRFToken': $_csrf}} )" 
-                    class="btn btn-secondary mr-5">Un-save</button>
+                <button type="submit" data-on:click="@patch('/vote/down/{{ story.id }}', {headers: {'X-CSRFToken': $_csrf}} )" 
+                    class="btn btn-secondary mr-5">Forget</button>
             </div>
         {% else %}
             <div class="inline-flex">

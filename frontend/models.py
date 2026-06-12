@@ -51,6 +51,23 @@ class Story(models.Model):
         return f"{self.data_source.code} #{self.id}: {self.title[:50]}"
 
     @classmethod
+    def saved(cls, user_id, limit=10, last_id=None):
+        """
+        Return items saved (TODO: consolidate with unskipped?) 
+        """
+        saved = Vote.objects.filter(user=user_id,
+                                    direction=Vote.Direction.UP) \
+                                    .values_list('story_id', flat=True)
+        query = Story.objects.filter(id__in=saved)
+        if last_id:
+            query = query.filter(id__lt=last_id)
+
+        query = query.order_by("-id") \
+                    .select_related("data_source")
+        return list(query[:limit])
+
+
+    @classmethod
     def unskipped(cls, user_id=None, order_by="-id",
                         limit=10, sources=None, last_id=None):
         """
