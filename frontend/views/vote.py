@@ -31,11 +31,13 @@ def vote(request, direction, story_id):
         ])
 
     if direction == "up":
-        v = Vote(user=request.user, story=story, direction = 1)
+        v = Vote(user=request.user, story=story,
+                 direction = Vote.Direction.UP)
         v.save()
         votes[story.id] = [v]
     elif direction == "down":
-        v = Vote(user=request.user, story=story, direction = -1)
+        v = Vote(user=request.user, story=story,
+                 direction = Vote.Direction.DOWN)
         v.save()
         votes[story.id] = [v]
 

@@ -51,9 +51,13 @@ class Story(models.Model):
 
 
 class Vote(models.Model):
+    class Direction(models.IntegerChoices):
+        DOWN = -1, "down"
+        UP = 1, "up"
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
-    direction = models.SmallIntegerField(choices={-1: "down", 1 : "up"})
+    direction = models.SmallIntegerField(choices=Direction)
     time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
