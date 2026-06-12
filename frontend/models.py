@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 from django.contrib.auth.models import User
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """
@@ -48,6 +49,44 @@ class Story(models.Model):
 
     def __str__(self):
         return f"{self.data_source.code} #{self.id}: {self.title[:50]}"
+
+    @classmethod
+    def unskipped(cls, user_id=None, order_by="-id",
+                        limit=10, sources=None, last_id=None):
+        """
+        get stories that the user hasn't skipped yet
+
+        if no user id, get all stories that match other criteria
+
+        this needs to potentially handle:
+            after_id => last story seen (for pagination)
+            data_source => list of sources to filter to
+            saved => include saved ones?
+            skipped => include skipped ones?
+            order_by => direction to sort
+        """
+
+        # get skipped
+        if user_id:
+            skipped = Vote.objects.filter(user=user_id,
+                                        direction=Vote.Direction.DOWN) \
+                                    .values_list('story_id', flat=True)
+
+            query = Story.objects.exclude(id__in=skipped)
+        else:
+            query = Story.objects
+
+        if sources:
+            query = query.filter(data_source__in=sources)
+
+        if last_id:
+            # fixme: this depends on order-by
+            query = query.filter(id__lt=last_id)
+
+        query = query.order_by(order_by) \
+            .select_related('data_source')
+
+        return list(query[:limit])
 
 
 class Vote(models.Model):
