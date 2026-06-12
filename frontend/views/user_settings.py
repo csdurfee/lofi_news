@@ -52,7 +52,7 @@ def _render_and_return(request, new_tabs=None, patch_signal=False):
 
     # hide settings button
     # this should not be done if request is POST because
-    # the button is already gone.
+    # GET happens first, so the button is already gone.
     if request.method == "GET":
         responses.append(
             SSE.remove_elements("#settings-btn")

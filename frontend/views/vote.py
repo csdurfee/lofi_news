@@ -1,6 +1,6 @@
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404
 from django.views.decorators.http import require_http_methods
 
 from frontend.models import Story, Vote
@@ -23,8 +23,6 @@ def vote(request, direction, story_id):
 
     votes = Vote.by_user_and_stories(user_id=request.user.id,
                                      story_ids=[story.id])
-    # if story_id in votes:
-    #     return HttpResponseBadRequest("already voted, no take backsies")
 
     if (request.method == "DELETE") and (direction == "delete"):
         votes[story_id].delete()
