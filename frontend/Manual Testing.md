@@ -16,3 +16,13 @@ for the client to treat something as a header, it must start with `HTTP_`... ugh
 ```python
 c.get("/more", {'datastar': "{\"lastId\":290}"}, **{'HTTP_Datastar-Request': 'true'})
 ```
+
+# E2E Testing with Playwright
+```python
+from playwright.sync_api import expect, sync_playwright
+
+playwright = sync_playwright().start()
+browser = playwright.chromium.launch()
+page.goto("http://localhost:8000/")
+
+```
