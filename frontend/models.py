@@ -29,12 +29,20 @@ class UserProfile(models.Model):
     def __str__(self):
         return 'Profile of user: {}'.format(self.user.username)
 
+class Channel(models.Model):
+    code = models.CharField(max_length=30)
+    description = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"[{self.code}] {self.description[:50]}"
+
 class DataSource(models.Model):
     code = models.CharField(max_length=30)
     type = models.CharField(max_length=20)
     url = models.URLField()
     description = models.CharField(max_length=255, null=True)
     last_checked = models.DateTimeField(auto_now_add=True, null=True)
+    channel = models.ForeignKey(Channel, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return f"{self.code}: {self.url[:50]}"

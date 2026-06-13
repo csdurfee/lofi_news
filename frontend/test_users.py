@@ -4,7 +4,6 @@ from django.urls import reverse
 from frontend.models import UserProfile, user_profile_default_value
 
 
-
 class UserProfileSignalTest(TestCase):
     def test_profile_created_with_user(self):
         user = User.objects.create_user(username='signaltest', password='pw123!')

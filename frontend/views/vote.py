@@ -11,7 +11,6 @@ from datastar_py.django import ServerSentEventGenerator as SSE
 import logging
 logger = logging.getLogger(__name__)
 
-# FIXME: @login_required is going to an unstyled login page right now (I think it's datastar's fault)
 @require_http_methods(['POST', 'PATCH'])
 @login_required(login_url="/accounts/login")
 def vote(request, direction, story_id):
@@ -44,17 +43,22 @@ def vote(request, direction, story_id):
     v.save()
     votes[story.id] = [v]
 
-    if (request.method=="PATCH"):
-        # this means the user Un-saved the item from the save list... make it disappear
-        return DatastarResponse([
+    # if (request.method=="PATCH"):
+    #     # this means the user Un-saved the item from the save list... make it disappear
+    #     return DatastarResponse([
+    #         SSE.remove_elements(f"#story-{story.id}")
+    #     ])
+    # else:
+    #     # rendered = render_to_string("frontend/story_panel.html",
+    #     #                             {'story': story,
+    #     #                             'votes_on_page': votes}, request=request)
+    #     # return DatastarResponse(
+    #     #     [
+    #     #         SSE.patch_elements(rendered)
+    #     #     ]
+    #     # )
+
+    # patch story out on ANY type of vote.
+    return DatastarResponse([
             SSE.remove_elements(f"#story-{story.id}")
-        ])
-    else:
-        rendered = render_to_string("frontend/story_panel.html",
-                                    {'story': story,
-                                    'votes_on_page': votes}, request=request)
-        return DatastarResponse(
-            [
-                SSE.patch_elements(rendered)
-            ]
-        )
+    ])

@@ -56,11 +56,11 @@ def _render_datastar(request, stories, votes_on_page,
                                 last_id, new_tabs, source_code):
     rendered = render_to_string('frontend/stories.html',
                         {'stories': stories,
-                         'votes_on_page': votes_on_page,
+                        'votes_on_page': votes_on_page,
                         'last_id': last_id,
                         'new_tabs': int(new_tabs),
-                         'source_code': source_code,
-                         }, request=request)
+                        'source_code': source_code,
+                        }, request=request)
 
     if len(stories) == 0:
         return _no_stories()
@@ -89,13 +89,13 @@ def _no_stories():
         SSE.remove_elements("#load-more")
     )
 
-
 @require_http_methods(['GET'])
 def index(request, source_code=None, more=False):
     limit = 10
 
     stories = _get_stories(request, source_code)
 
+    # FIXME: handle if there are no stories
     last_id = stories[len(stories) - 1].id
     story_ids = {story.id for story in stories}
 
